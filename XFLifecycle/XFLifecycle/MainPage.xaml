@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:XFLifecycle"
+             xmlns:effects="clr-namespace:XFLifecycle.Effects;assembly=XFLifecycle"
+             x:Class="XFLifecycle.MainPage">
+
+    <Grid x:Name="MainContainer" Margin="20">
+        <Button Text="CLICK TO REMOVE" Clicked="Button_OnClicked" HorizontalOptions="Center" VerticalOptions="Center">
+            <Button.Effects>
+                <effects:RoutingLifecycleEffect Loaded="RoutingLifecycleEffect_OnLoaded" Unloaded="RoutingLifecycleEffect_OnUnloaded"/>
+            </Button.Effects>
+        </Button>
+    </Grid>
+</ContentPage>

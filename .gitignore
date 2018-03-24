@@ -3,3 +3,13 @@
 ################################################################################
 
 /.vs/XFLifecycle/v15
+/XFLifecycle/XFLifecycle/bin/Debug/netstandard2.0
+/XFLifecycle/XFLifecycle/obj
+/XFLifecycle/XFLifecycle.Android/bin/Debug
+/XFLifecycle/XFLifecycle.Android/obj
+/XFLifecycle/XFLifecycle.Android/XFLifecycle.Android.csproj.user
+/XFLifecycle/XFLifecycle.iOS/bin/iPhoneSimulator/Debug
+/XFLifecycle/XFLifecycle.iOS/obj
+/XFLifecycle/XFLifecycle.UWP/bin/x86/Debug
+*.user
+/XFLifecycle/XFLifecycle.UWP/obj
