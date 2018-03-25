@@ -20,12 +20,12 @@ namespace XFLifecycle
 	        MainContainer.Children.Clear();
 	    }
 
-	    private void RoutingLifecycleEffect_OnLoaded(object sender, EventArgs e)
+	    private void ViewLifecycleEffect_OnLoaded(object sender, EventArgs e)
 	    {
 	        DisplayAlert("LOADED", "Button was added", "OK");
         }
 
-	    private void RoutingLifecycleEffect_OnUnloaded(object sender, EventArgs e)
+	    private void ViewLifecycleEffect_OnUnloaded(object sender, EventArgs e)
 	    {
 	        DisplayAlert("UNLOADED", "Button was removed", "OK");
 	    }

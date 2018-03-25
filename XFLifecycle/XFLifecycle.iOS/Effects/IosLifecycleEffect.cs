@@ -8,20 +8,20 @@ using Xamarin.Forms.Platform.iOS;
 using XFLifecycle.Effects;
 using XFLifecycle.iOS.Effects;
 
-[assembly:ResolutionGroupName(RoutingLifecycleEffect.EffectGroupName)]
-[assembly:ExportEffect(typeof(LifecycleEffect), RoutingLifecycleEffect.EffectName)]
+[assembly:ResolutionGroupName(ViewLifecycleEffect.EffectGroupName)]
+[assembly:ExportEffect(typeof(IosLifecycleEffect), ViewLifecycleEffect.EffectName)]
 namespace XFLifecycle.iOS.Effects
 {
-    public class LifecycleEffect : PlatformEffect
+    public class IosLifecycleEffect : PlatformEffect
     {
         private UIView _nativeView;
         private SuperviewListener _myObserver;
-        private RoutingLifecycleEffect _routingLifecycleEffect;
+        private ViewLifecycleEffect _viewLifecycleEffect;
 
         protected override void OnAttached()
         {
-            _routingLifecycleEffect = Element.Effects.OfType<RoutingLifecycleEffect>().FirstOrDefault();
-            _myObserver = new SuperviewListener(_routingLifecycleEffect, Element);
+            _viewLifecycleEffect = Element.Effects.OfType<ViewLifecycleEffect>().FirstOrDefault();
+            _myObserver = new SuperviewListener(_viewLifecycleEffect, Element);
             
             _nativeView = Control ?? Container;
             _nativeView.AddObserver(_myObserver, new NSString(nameof(Control.Superview)), NSKeyValueObservingOptions.Initial, new IntPtr());
@@ -30,17 +30,17 @@ namespace XFLifecycle.iOS.Effects
         protected override void OnDetached()
         {
             _nativeView.RemoveObserver(_myObserver, new NSString(nameof(Control.Superview)));
-            _routingLifecycleEffect.RaiseUnloaded(Element);
+            _viewLifecycleEffect.RaiseUnloaded(Element);
         }
 
         private class SuperviewListener : NSObject
         {
-            private readonly RoutingLifecycleEffect _routingLifecycleEffect;
+            private readonly ViewLifecycleEffect _viewLifecycleEffect;
             private readonly Element _element;
 
-            public SuperviewListener(RoutingLifecycleEffect routingLifecycleEffect, Element element)
+            public SuperviewListener(ViewLifecycleEffect viewLifecycleEffect, Element element)
             {
-                _routingLifecycleEffect = routingLifecycleEffect;
+                _viewLifecycleEffect = viewLifecycleEffect;
                 _element = element;
             }
 
@@ -50,9 +50,9 @@ namespace XFLifecycle.iOS.Effects
                     return;
 
                 if (view.Superview != null)
-                    _routingLifecycleEffect.RaiseLoaded(_element);
+                    _viewLifecycleEffect.RaiseLoaded(_element);
                 else
-                    _routingLifecycleEffect.RaiseUnloaded(_element);
+                    _viewLifecycleEffect.RaiseUnloaded(_element);
             }
         }
     }

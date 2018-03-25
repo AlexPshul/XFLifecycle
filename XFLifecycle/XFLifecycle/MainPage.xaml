@@ -8,7 +8,7 @@
     <Grid x:Name="MainContainer" Margin="20">
         <Button Text="CLICK TO REMOVE" Clicked="Button_OnClicked" HorizontalOptions="Center" VerticalOptions="Center">
             <Button.Effects>
-                <effects:RoutingLifecycleEffect Loaded="RoutingLifecycleEffect_OnLoaded" Unloaded="RoutingLifecycleEffect_OnUnloaded"/>
+                <effects:ViewLifecycleEffect Loaded="ViewLifecycleEffect_OnLoaded" Unloaded="ViewLifecycleEffect_OnUnloaded"/>
             </Button.Effects>
         </Button>
     </Grid>
