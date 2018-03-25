@@ -14,46 +14,31 @@ namespace XFLifecycle.iOS.Effects
 {
     public class IosLifecycleEffect : PlatformEffect
     {
-        private UIView _nativeView;
-        private SuperviewListener _myObserver;
+        private const NSKeyValueObservingOptions ObservingOptions = NSKeyValueObservingOptions.Initial | NSKeyValueObservingOptions.OldNew | NSKeyValueObservingOptions.Prior;
+
         private ViewLifecycleEffect _viewLifecycleEffect;
+        private IDisposable _isLoadedObserverDisposable;
 
         protected override void OnAttached()
         {
             _viewLifecycleEffect = Element.Effects.OfType<ViewLifecycleEffect>().FirstOrDefault();
-            _myObserver = new SuperviewListener(_viewLifecycleEffect, Element);
             
-            _nativeView = Control ?? Container;
-            _nativeView.AddObserver(_myObserver, new NSString(nameof(Control.Superview)), NSKeyValueObservingOptions.Initial, new IntPtr());
+            UIView nativeView = Control ?? Container;
+            _isLoadedObserverDisposable = nativeView?.AddObserver("superview", ObservingOptions, IsViewLoadedObserver);
         }
 
         protected override void OnDetached()
         {
-            _nativeView.RemoveObserver(_myObserver, new NSString(nameof(Control.Superview)));
             _viewLifecycleEffect.RaiseUnloaded(Element);
+            _isLoadedObserverDisposable.Dispose();
         }
 
-        private class SuperviewListener : NSObject
+        private void IsViewLoadedObserver(NSObservedChange nsObservedChange)
         {
-            private readonly ViewLifecycleEffect _viewLifecycleEffect;
-            private readonly Element _element;
-
-            public SuperviewListener(ViewLifecycleEffect viewLifecycleEffect, Element element)
-            {
-                _viewLifecycleEffect = viewLifecycleEffect;
-                _element = element;
-            }
-
-            public override void ObserveValue(NSString keyPath, NSObject ofObject, NSDictionary change, IntPtr context)
-            {
-                if (!(ofObject is UIView view))
-                    return;
-
-                if (view.Superview != null)
-                    _viewLifecycleEffect.RaiseLoaded(_element);
-                else
-                    _viewLifecycleEffect.RaiseUnloaded(_element);
-            }
+            if (!nsObservedChange.NewValue.Equals(NSNull.Null))
+                _viewLifecycleEffect?.RaiseLoaded(Element);
+            else if (!nsObservedChange.OldValue.Equals(NSNull.Null))
+                _viewLifecycleEffect?.RaiseUnloaded(Element);
         }
     }
 }
